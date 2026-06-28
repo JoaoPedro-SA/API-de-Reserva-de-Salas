@@ -9,5 +9,9 @@ services:
         value: "false"
       - key: CORS_ALLOW_ORIGIN
         value: https://front-gestao-escolar.onrender.com
+      - key: SQLITE_DB_PATH
+        value: banco_de_dados.db
+      - key: SYNC_ON_STARTUP
+        value: "false"
       - key: GESTAO_API_BASE_URL
         value: https://api-de-gerenciamento-escolar.onrender.com

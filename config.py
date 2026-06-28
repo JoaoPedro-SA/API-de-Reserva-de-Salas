@@ -1,10 +1,14 @@
 import os
 from flask import Flask
-banco_de_dados = "banco_de_dados.db"
+banco_de_dados = os.environ.get(
+    "SQLITE_DB_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "banco_de_dados.db"),
+)
 GESTAO_API_BASE_URL = os.environ.get(
     "GESTAO_API_BASE_URL",
     "https://api-de-gerenciamento-escolar.onrender.com"
 ).rstrip("/")
+SYNC_ON_STARTUP = os.environ.get("SYNC_ON_STARTUP", "false").lower() == "true"
 
 def create_app():
     app = Flask(__name__)

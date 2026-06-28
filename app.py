@@ -3,6 +3,7 @@ from flask import Flask
 from controller.reserva_controller import reserva_bp
 from docs import docs_bp
 from model.bancoSQLite import inicializar_banco
+from config import SYNC_ON_STARTUP
 from model.bancoSQLite import importar_professores_da_api
 from model.bancoSQLite import importar_turmas_da_api
 
@@ -11,8 +12,9 @@ app.register_blueprint(reserva_bp)
 app.register_blueprint(docs_bp)
 
 inicializar_banco()
-importar_professores_da_api()
-importar_turmas_da_api()
+if SYNC_ON_STARTUP:
+    importar_professores_da_api()
+    importar_turmas_da_api()
 
 if __name__ == "__main__":
     import os

@@ -55,7 +55,25 @@ OPENAPI_SPEC = {
                     "503": {"description": "Erro ao conectar com a API de turma"},
                 },
             },
-        }
+        },
+        "/reservas/{reserva_id}": {
+            "delete": {
+                "summary": "Remove uma reserva",
+                "parameters": [
+                    {
+                        "name": "reserva_id",
+                        "in": "path",
+                        "required": True,
+                        "schema": {"type": "integer"},
+                    }
+                ],
+                "responses": {
+                    "200": {"description": "Reserva removida"},
+                    "404": {"description": "Reserva nao encontrada"},
+                    "500": {"description": "Erro ao deletar reserva"},
+                },
+            }
+        },
     },
     "components": {
         "schemas": {

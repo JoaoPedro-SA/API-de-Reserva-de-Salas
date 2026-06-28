@@ -69,3 +69,19 @@ def listar_reservas():
         return jsonify({"erro": "Erro ao buscar reservas"}), 500
     finally:
         banco.close()
+
+
+@reserva_bp.route('/reservas/<int:reserva_id>', methods=['DELETE'])
+def deletar_reserva(reserva_id):
+    banco = BancoSQLite()
+    try:
+        banco.cursor.execute("DELETE FROM Reservas WHERE id = ?", (reserva_id,))
+        banco.conexao.commit()
+        if banco.cursor.rowcount == 0:
+            return jsonify({"erro": "Reserva nao encontrada"}), 404
+        return jsonify({"mensagem": "Reserva removida com sucesso"}), 200
+    except Exception as e:
+        print("Erro ao deletar reserva:", e)
+        return jsonify({"erro": "Erro ao deletar reserva: " + str(e)}), 500
+    finally:
+        banco.close()

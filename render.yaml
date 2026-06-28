@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: api-de-reserva-de-salas
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: CORS_ALLOW_ORIGIN
+        value: https://front-gestao-escolar.onrender.com
+      - key: GESTAO_API_BASE_URL
+        value: https://api-de-gerenciamento-escolar.onrender.com

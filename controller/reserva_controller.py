@@ -1,14 +1,15 @@
 from flask import Blueprint, request, jsonify
 from model.bancoSQLite import BancoSQLite
 import requests
+from config import GESTAO_API_BASE_URL
 
 reserva_bp = Blueprint('reserva_bp', __name__)
 
-API_ESCOLAR_URL = "https://new-api-flask2.onrender.com/api/turma"
+API_ESCOLAR_URL = f"{GESTAO_API_BASE_URL}/api/turma"
 
 def validar_turma(turma_id):
     try:
-        resposta = requests.get(f"{API_ESCOLAR_URL}/{turma_id}")
+        resposta = requests.get(f"{API_ESCOLAR_URL}/{turma_id}", timeout=10)
         return resposta.status_code == 200
     except requests.exceptions.RequestException as e:
         print(f"Erro ao validar turma: {e}")
@@ -16,7 +17,7 @@ def validar_turma(turma_id):
 
 @reserva_bp.route('/reservas', methods=['POST'])
 def criar_reserva():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     campos_obrigatorios = ["turma_id", "sala", "data", "hora_inicio", "hora_fim"]
 
     if not all(campo in data for campo in campos_obrigatorios):
@@ -44,7 +45,7 @@ def criar_reserva():
         return jsonify({"mensagem": "Reserva criada com sucesso"}), 201
     except Exception as e:
         print("Erro ao inserir reserva:", e)
-        return jsonify({"erro": "Erro ao criar reserva"+ e}), 500
+        return jsonify({"erro": "Erro ao criar reserva: " + str(e)}), 500
     finally:
         banco.close()
 

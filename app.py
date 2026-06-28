@@ -13,6 +13,11 @@ importar_professores_da_api()
 importar_turmas_da_api()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    import os
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5001)),
+        debug=app.config.get("DEBUG", False),
+    )
     
 

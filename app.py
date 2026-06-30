@@ -1,5 +1,5 @@
-from config import create_app
-from flask import Flask
+from config import ATIVIDADE_API_BASE_URL, API_TARGET, GESTAO_API_BASE_URL, create_app
+from flask import jsonify
 from controller.reserva_controller import reserva_bp
 from docs import docs_bp
 from model.bancoSQLite import inicializar_banco
@@ -10,6 +10,20 @@ from model.bancoSQLite import importar_turmas_da_api
 app = create_app()
 app.register_blueprint(reserva_bp)
 app.register_blueprint(docs_bp)
+
+
+@app.get("/health")
+def health():
+    return jsonify({
+        "status": "ok",
+        "service": "reserva",
+        "api_target": API_TARGET,
+        "dependencies": {
+            "gestao": GESTAO_API_BASE_URL,
+            "atividade": ATIVIDADE_API_BASE_URL,
+        },
+    })
+
 
 inicializar_banco()
 if SYNC_ON_STARTUP:
